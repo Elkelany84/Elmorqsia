@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1056265052802",
+    "project_id": "elmorqsiaschool",
+    "storage_bucket": "elmorqsiaschool.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1056265052802:android:bc52b12806da247c8e4a9b",
+        "android_client_info": {
+          "package_name": "com.example.elmorqsiaschool"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1056265052802-5ileb7q71rlv9gtgmf65bqj52s1d3aqi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_QpqbwKaVX0_3xsJDCsJH4OxgDN9yAfw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1056265052802-5ileb7q71rlv9gtgmf65bqj52s1d3aqi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
