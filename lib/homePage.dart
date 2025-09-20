@@ -1,6 +1,5 @@
 import 'package:elmorqsiaschool/reservations/reserveDateForTemplate.dart';
 import 'package:elmorqsiaschool/reservations/showListViewReservedData.dart';
-import 'package:elmorqsiaschool/reservations/showPdfData.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -210,89 +209,93 @@ class HomePage extends StatelessWidget {
             //   ),
             // ),
 
-            const SizedBox(height: 100),
+            // const SizedBox(height: 20),
 
             //New Button 2
             SizedBox(
               height: buttonHeight,
               width: buttonWidth,
-              child: ElevatedButton(
-                onPressed: () {
-                  //navigate to WeeklyGridView page
-                  // Navigator.push(
-                  //     context,
-                  // MaterialPageRoute(
-                  //     builder: (context) => WeeklyGridView()));
-                  //navigate to TimetableScreen
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => TimetableScreen()));
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ReservationReport()));
-                  // ScaffoldMessenger.of(context).showSnackBar(
-                  //   const SnackBar(content: Text('Button 1 Pressed!')),
-                  // );
-                },
-                style: ElevatedButton.styleFrom(
-                  // padding:
-                  //     const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  elevation: 0,
-                  shadowColor: const Color(0xFF1565C0), // Blue 800
-                ).copyWith(
-                  overlayColor: MaterialStateProperty.all(
-                      const Color(0x22000000)), // Ripple effect
-                ),
-                child: Ink(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    gradient: const LinearGradient(
-                      colors: [
-                        Color(0xFF2196F3), // Blue 500
-                        Color(0xFF0D47A1), // Blue 900
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      stops: [0.0, 0.8],
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFF0D47A1).withOpacity(0.4),
-                        blurRadius: 10,
-                        spreadRadius: 2,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Container(
-                    // constraints:
-                    //     const BoxConstraints(minWidth: 88.0, minHeight: 48.0),
-                    alignment: Alignment.center,
-                    child: const Text(
-                      // 'جدول الحصص',
-                      'عرض الداتا للموظف',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
-                        fontFamily: 'Tajawal',
-                        shadows: [
-                          Shadow(
-                            color: Colors.black26,
-                            blurRadius: 2,
-                            offset: Offset(1, 1),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              // child: ElevatedButton(
+              //   onPressed: () {
+              //     //navigate to WeeklyGridView page
+              //     // Navigator.push(
+              //     //     context,
+              //     // MaterialPageRoute(
+              //     //     builder: (context) => WeeklyGridView()));
+              //     //navigate to TimetableScreen
+              //     // Navigator.push(
+              //     //     context,
+              //     //     MaterialPageRoute(
+              //     //         builder: (context) => TimetableScreen()));
+              //     Navigator.push(
+              //         context,
+              //         MaterialPageRoute(
+              //             builder: (context) => AcademicYearSelector(
+              //                   onYearSelected: (year) {
+              //                     print('Selected academic year: $year');
+              //                   },
+              //                 )));
+              //     // ScaffoldMessenger.of(context).showSnackBar(
+              //     //   const SnackBar(content: Text('Button 1 Pressed!')),
+              //     // );
+              //   },
+              //   style: ElevatedButton.styleFrom(
+              //     // padding:
+              //     //     const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              //     foregroundColor: Colors.white,
+              //     shape: RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(10),
+              //     ),
+              //     elevation: 0,
+              //     shadowColor: const Color(0xFF1565C0), // Blue 800
+              //   ).copyWith(
+              //     overlayColor: MaterialStateProperty.all(
+              //         const Color(0x22000000)), // Ripple effect
+              //   ),
+              //   child: Ink(
+              //     decoration: BoxDecoration(
+              //       borderRadius: BorderRadius.circular(10),
+              //       gradient: const LinearGradient(
+              //         colors: [
+              //           Color(0xFF2196F3), // Blue 500
+              //           Color(0xFF0D47A1), // Blue 900
+              //         ],
+              //         begin: Alignment.topLeft,
+              //         end: Alignment.bottomRight,
+              //         stops: [0.0, 0.8],
+              //       ),
+              //       boxShadow: [
+              //         BoxShadow(
+              //           color: const Color(0xFF0D47A1).withOpacity(0.4),
+              //           blurRadius: 10,
+              //           spreadRadius: 2,
+              //           offset: const Offset(0, 4),
+              //         ),
+              //       ],
+              //     ),
+              //     child: Container(
+              //       // constraints:
+              //       //     const BoxConstraints(minWidth: 88.0, minHeight: 48.0),
+              //       alignment: Alignment.center,
+              //       child: const Text(
+              //         // 'جدول الحصص',
+              //         'عرض الداتا للموظف',
+              //         style: TextStyle(
+              //           fontWeight: FontWeight.bold,
+              //           fontSize: 24,
+              //           fontFamily: 'Tajawal',
+              //           shadows: [
+              //             Shadow(
+              //               color: Colors.black26,
+              //               blurRadius: 2,
+              //               offset: Offset(1, 1),
+              //             ),
+              //           ],
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ),
             // Old Button 2
             // SizedBox(
@@ -325,7 +328,7 @@ class HomePage extends StatelessWidget {
             //   ),
             // ),
 
-            const SizedBox(height: 100), // Spacer
+            const SizedBox(height: 50), // Spacer
 //New Button 3
             SizedBox(
               height: buttonHeight,

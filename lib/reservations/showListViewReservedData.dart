@@ -251,8 +251,16 @@ class _ReservationsListState extends State<ReservationsList> {
                   Text(' ${data['periodDetails']}'),
               ],
             ),
+            Text('إسم الطالب: ${data['studentName']}'),
+            Text('كود الطالب: ${data['studentCode']}'),
+            Text('الرقم القومى للطالب: ${data['studentID']}'),
+            Text('الموبايل: ${data['mobile']}'),
             Text('النوع: ${data['type']}'),
             Text('إسم المدرسة: ${data['schoolName']}'),
+            Text('الصف الدراسى: ${data['classStage']}'),
+            Text('العام الدراسى: ${data['academicYear']}'),
+            Text('مكان الجهة: ${data['insideOutside']}'),
+            Text('اللغة المطلوبة: ${data['language']}'),
             // if (data['periodDetails'] != null)
             //   Text('Time: ${data['periodDetails']}'),
             if (data['createdAt'] != null)

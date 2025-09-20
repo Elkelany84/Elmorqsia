@@ -20,13 +20,19 @@ class _ReservationFormState extends State<ReservationForm> {
   final TextEditingController _schoolNameController = TextEditingController();
   final TextEditingController _classStageController = TextEditingController();
   final TextEditingController _mobileController = TextEditingController();
+  final TextEditingController _languageController = TextEditingController();
+  final TextEditingController _academicYearController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
 
   DateTime? _selectedDate; // تاريخ الحجز
-  String? _selectedInfo;
-  String? _selectedPeriod;
+  String? _selectedInfo; // قيد - نجاح -رسوب
+  String? _selectedPeriod; //الفترة الأولى ، الفترة الثانية
+  String? _selectedLanguage; //عربى أو إنجليزى
+  String? _selectedInsideOutside; // داخل أو خارج الجمهورية
 
   List<String> _infoOptions = []; // قيد - نجاح -رسوب
+  List<String> _infoLanguage = []; // اللغة العربية - اللغة الاجنبية
+  List<String> _insideOutside = []; // داخل أو خارج الجمهورية
   List<String> _periodOptions = []; //الفترة الأولى ، الفترة الثانية
   Map<String, String> _periodDetails =
       {}; //من 10 صباحا حتى 11.30 صباحا ،من 12 ظهرا حتى 1.30 ظهرا
@@ -67,6 +73,8 @@ class _ReservationFormState extends State<ReservationForm> {
   void initState() {
     super.initState();
     _loadDropdownData();
+    // _generateAcademicYears();
+    // _selectedYear = initialValue;
   }
 
   //بيان قيد - نجاح - رسوب
@@ -85,15 +93,17 @@ class _ReservationFormState extends State<ReservationForm> {
           await _firestore.collection('settings').doc('insideOutside').get();
       if (infoDoc.exists) {
         setState(() {
-          _infoOptions = List<String>.from(infoDoc.data()?['options'] ?? []);
+          _insideOutside =
+              List<String>.from(infoInOutside.data()?['options'] ?? []);
         });
       }
       //   عربى أو إنجليزى
-      final infoLanguague =
+      final infoLanguage =
           await _firestore.collection('settings').doc('infoLanguage').get();
       if (infoDoc.exists) {
         setState(() {
-          _infoOptions = List<String>.from(infoDoc.data()?['options'] ?? []);
+          _infoLanguage =
+              List<String>.from(infoLanguage.data()?['options'] ?? []);
         });
       }
 
@@ -116,8 +126,8 @@ class _ReservationFormState extends State<ReservationForm> {
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
+      initialDate: DateTime.now().add(Duration(days: 1)),
+      firstDate: DateTime.now().add(Duration(days: 1)),
       lastDate: DateTime.now().add(const Duration(days: 365)),
     );
 
@@ -171,7 +181,9 @@ class _ReservationFormState extends State<ReservationForm> {
         _studentIDController.text.isEmpty ||
         _schoolNameController.text.isEmpty ||
         _classStageController.text.isEmpty ||
-        _mobileController.text.isEmpty) {
+        _mobileController.text.isEmpty ||
+        // _languageController.text.isEmpty ||
+        _academicYearController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('برجاء استكمال كافة البيانات')),
       );
@@ -201,7 +213,11 @@ class _ReservationFormState extends State<ReservationForm> {
         'studentID': _studentIDController.text,
         'schoolName': _schoolNameController.text,
         'classStage': _classStageController.text,
+        // 'academicYear': _selectedYear ?? _getCurrentAcademicYear(),
         'mobile': _mobileController.text,
+        'insideOutside': _selectedInsideOutside,
+        'language': _selectedLanguage,
+        'academicYear': _academicYearController.text,
         'date': formattedDate,
         'type': _selectedInfo,
         'period': _selectedPeriod,
@@ -222,6 +238,8 @@ class _ReservationFormState extends State<ReservationForm> {
       _classStageController.clear();
       _mobileController.clear();
       _dateController.clear();
+      _academicYearController.clear();
+      _languageController.clear();
       setState(() {
         _selectedDate = null;
         _selectedInfo = null;
@@ -239,6 +257,32 @@ class _ReservationFormState extends State<ReservationForm> {
       });
     }
   }
+
+  //Choose the years like 2024-2025
+  // final ValueChanged<String> onYearSelected = (year) {
+  //   print('Selected academic year: $year');
+  // };
+  // final String? initialValue = '2024-2025';
+  // String? _selectedYear;
+  // final List<String> _availableYears = [];
+  // void _generateAcademicYears() {
+  //   final currentYear = DateTime.now().year;
+  //   // Generate years from 10 years ago to 10 years in the future
+  //   for (int year = currentYear - 80; year <= currentYear; year++) {
+  //     _availableYears.add('$year-${year + 1}');
+  //   }
+  // }
+  //
+  // String _getCurrentAcademicYear() {
+  //   final now = DateTime.now();
+  //   final currentYear = now.year;
+  //   // If current month is after June, it's the next academic year
+  //   if (now.month >= 6) {
+  //     return '$currentYear-${currentYear + 1}';
+  //   } else {
+  //     return '${currentYear - 1}-$currentYear';
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -378,10 +422,79 @@ class _ReservationFormState extends State<ReservationForm> {
               TextField(
                 controller: _classStageController,
                 decoration: const InputDecoration(
-                  labelText: 'مثال: الصف الثالث الإبتدائى أو العام 2024-2025',
+                  labelText: 'مثال: الصف الثالث الإبتدائى',
                   border: OutlineInputBorder(),
                 ),
               ),
+              const SizedBox(height: 16),
+              // السنة الدراسية
+              TextField(
+                controller: _academicYearController,
+                decoration: const InputDecoration(
+                  labelText: 'مثال: 2020-2021',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 16),
+              // لغة البيان
+              DropdownButtonFormField<String>(
+                value: _selectedLanguage,
+                decoration: const InputDecoration(
+                  labelText: 'اختر اللغة المطلوبة',
+                  border: OutlineInputBorder(),
+                ),
+                items: _infoLanguage.map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedLanguage = newValue;
+                  });
+                },
+              ),
+              // TextField(
+              //   controller: _languageController,
+              //   decoration: const InputDecoration(
+              //     labelText: 'اكتب اللغة العربية أو اللغة الأجنبية',
+              //     border: OutlineInputBorder(),
+              //   ),
+              // ),
+              // const SizedBox(height: 16),
+              // DropdownButtonFormField<String>(
+              //   value: _selectedYear ?? _getCurrentAcademicYear(),
+              //   decoration: InputDecoration(
+              //     labelText: 'العام الدراسى',
+              //     border: OutlineInputBorder(
+              //       borderRadius: BorderRadius.circular(8),
+              //     ),
+              //     contentPadding:
+              //         const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              //   ),
+              //   items: _availableYears.map((String year) {
+              //     return DropdownMenuItem<String>(
+              //       value: year,
+              //       child: Text(
+              //         year,
+              //         style: const TextStyle(
+              //             fontSize: 16, fontWeight: FontWeight.normal),
+              //       ),
+              //     );
+              //   }).toList(),
+              //   onChanged: (String? newValue) {
+              //     setState(() {
+              //       _selectedYear = newValue;
+              //     });
+              //     if (newValue != null) {
+              //       onYearSelected(newValue);
+              //     }
+              //   },
+              //   isExpanded: true,
+              //   icon: const Icon(Icons.arrow_drop_down),
+              //   borderRadius: BorderRadius.circular(8),
+              // ),
               const SizedBox(height: 16),
               // رقم الموبايل
               TextField(
@@ -423,6 +536,26 @@ class _ReservationFormState extends State<ReservationForm> {
                 },
               ),
               const SizedBox(height: 16),
+              // Info Dropdown نوع البيان المطلوب
+              DropdownButtonFormField<String>(
+                value: _selectedInsideOutside,
+                decoration: const InputDecoration(
+                  labelText: 'اختر الجهة',
+                  border: OutlineInputBorder(),
+                ),
+                items: _insideOutside.map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedInsideOutside = newValue;
+                  });
+                },
+              ),
+              const SizedBox(height: 16),
               // Date Picker
               TextField(
                 controller: _dateController,
@@ -438,13 +571,13 @@ class _ReservationFormState extends State<ReservationForm> {
               ),
               if (_selectedDate != null) ...[
                 const SizedBox(height: 8),
-                Text(
-                  'عدد الحجوزات الكلى: $_reservationsToday/3',
-                  style: TextStyle(
-                    color: _isDateActive ? Colors.green : Colors.red,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                // Text(
+                //   'عدد الحجوزات الكلى: $_reservationsToday/3',
+                //   style: TextStyle(
+                //     color: _isDateActive ? Colors.green : Colors.red,
+                //     fontWeight: FontWeight.bold,
+                //   ),
+                // ),
                 if (!_isDateActive) ...[
                   const SizedBox(height: 8),
                   Text(
