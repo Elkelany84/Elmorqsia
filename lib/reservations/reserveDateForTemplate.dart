@@ -28,12 +28,15 @@ class _ReservationFormState extends State<ReservationForm> {
   String? _selectedInfo; // قيد - نجاح -رسوب
   String? _selectedPeriod; //الفترة الأولى ، الفترة الثانية
   String? _selectedLanguage; //عربى أو إنجليزى
-  String? _selectedInsideOutside; // داخل أو خارج الجمهورية
+  String? _selectedInsideOutside; //// داخل أو خارج الجمهورية
+
+  String? _selectedEduType; // نوع التعليم عام - فنى - خاص
 
   List<String> _infoOptions = []; // قيد - نجاح -رسوب
   List<String> _infoLanguage = []; // اللغة العربية - اللغة الاجنبية
   List<String> _insideOutside = []; // داخل أو خارج الجمهورية
   List<String> _periodOptions = []; //الفترة الأولى ، الفترة الثانية
+  List<String> _eduType = []; // نوع التعليم عام - فنى - خاص
   Map<String, String> _periodDetails =
       {}; //من 10 صباحا حتى 11.30 صباحا ،من 12 ظهرا حتى 1.30 ظهرا
 
@@ -106,7 +109,14 @@ class _ReservationFormState extends State<ReservationForm> {
               List<String>.from(infoLanguage.data()?['options'] ?? []);
         });
       }
-
+      //   نوع التعليم
+      final eduType =
+          await _firestore.collection('settings').doc('eduType').get();
+      if (infoDoc.exists) {
+        setState(() {
+          _eduType = List<String>.from(eduType.data()?['options'] ?? []);
+        });
+      }
       // Load Period options
       final periodDoc =
           await _firestore.collection('settings').doc('periodOptions').get();
@@ -175,6 +185,9 @@ class _ReservationFormState extends State<ReservationForm> {
     if (_selectedDate == null ||
         _selectedInfo == null ||
         _selectedPeriod == null ||
+        _selectedLanguage == null ||
+        _selectedInsideOutside == null ||
+        _selectedEduType == null ||
         _toWhomController.text.isEmpty ||
         _studentNameController.text.isEmpty ||
         _studentCodeController.text.isEmpty ||
@@ -218,6 +231,7 @@ class _ReservationFormState extends State<ReservationForm> {
         'insideOutside': _selectedInsideOutside,
         'language': _selectedLanguage,
         'academicYear': _academicYearController.text,
+        'eduType': _selectedEduType,
         'date': formattedDate,
         'type': _selectedInfo,
         'period': _selectedPeriod,
@@ -434,6 +448,26 @@ class _ReservationFormState extends State<ReservationForm> {
                   labelText: 'مثال: 2020-2021',
                   border: OutlineInputBorder(),
                 ),
+              ),
+              const SizedBox(height: 16),
+              // نوع التعليم
+              DropdownButtonFormField<String>(
+                value: _selectedEduType,
+                decoration: const InputDecoration(
+                  labelText: 'اختر نوع التعليم',
+                  border: OutlineInputBorder(),
+                ),
+                items: _eduType.map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedEduType = newValue;
+                  });
+                },
               ),
               const SizedBox(height: 16),
               // لغة البيان
